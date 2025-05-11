@@ -1,2 +1,2 @@
 # aurora
-A Final requirements for HCI
+A Final requirement for HCI
