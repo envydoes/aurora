@@ -1,0 +1,152 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ordering System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .btn-primary {
+            background-color: #4CAF50;
+            border-color: #45a049;
+        }
+        .btn-primary:hover {
+            background-color: #45a049;
+            border-color: #3e8e41;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Ordering System</h2>
+        <form id="orderForm">
+        <form id="orderForm" action="/submit-order" method="POST">
+                <label for="customerName">Customer Name:</label>
+                <input type="text" class="form-control" id="customerName" name="customerName" required>
+            </div>
+            <div class="form-group">
+            </div>
+            <div class="form-group">
+                <label for="quantity">Quantity:</label>
+                <input type="number" class="form-control" id="quantity" name="quantity" min="1" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit Order</button>
+        </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#orderForm').submit(function(event) {
+                event.preventDefault();
+                var customerName = $('#customerName').val();
+                var itemName = $('#itemName').val();
+                var quantity = $('#quantity').val();
+                console.log('Order placed by ' + customerName + ': ' + quantity + ' ' + itemName);
+            });
+        });
+    </script>
+</body>
+</html>
+</html>
+
+sclass Room:
+    def __init__(self, description):
+        self.description = description
+        self.items = []
+
+    def add_item(self, item):
+        self.items.append(item)
+
+    def remove_item(self, item):
+        if item in self.items:
+            self.items.remove(item)
+            return True
+        return False
+
+class Player:
+    def __init__(self, name):
+        self.name = name
+        self.location = None
+
+    def move_to_room(self, room):
+        self.location = room
+
+    def pick_up_item(self, item):
+        if self.location and self.location.remove_item(item):
+            print(f"You picked up {item}.")
+            return True
+        else:
+            print("You can't pick that up.")
+            return False
+
+    def drop_item(self, item):
+        if self.location and self.pick_up_item(item):
+            print(f"You dropped {item}.")
+            return True
+        else:
+            return False
+
+class Item:
+    def __init__(self, name):
+        self.name = name
+
+# Create rooms
+room1 = Room("You are in a small room. There is a door to the north.")
+room2 = Room("You are in a dark cave. There is a light shining from the east and a door to the south.")
+
+# Add items to rooms
+room1.add_item(Item("torch"))
+room2.add_item(Item("sword"))
+
+# Create player and set initial location
+player = Player(" adventurer")
+player.move_to_room(room1)
+
+# Game loop
+while True:
+    print("\nYou are in " + player.location.description)
+    
+    # List items in the room
+    if player.location.items:
+        print("\nItems here:")
+        for item in player.location.items:
+            print(f" - {item.name}")
+    
+    choice = input("What do you want to do? (move north/south/east/west/pick up <item>/drop <item>) ").strip().lower()
+    
+    if choice == "north":
+        if player.location.name == "small room":
+            player.move_to_room(room2)
+        else:
+            print("You can't move that way.")
+    elif choice == "south":
+        if player.location.name == "dark cave":
+            player.move_to_room(room1)
+        else:
+            print("You can't move that way.")
+    elif choice.startswith("pick up"):
+        item_name = choice.split()[2]
+        item = Item(item_name)
+        if player.pick_up_item(item_name):
+            player.drop_item(item_name)
+    elif choice.startswith("drop"):
+        item_name = choice.split()[2]
+        item = Item(item_name)
+        if player.drop_item(item_name):
+            player.pick_up_item(item_name)
+    else:
+        print("I don't understand that command.")
+
+# Game end
+print("\nCongratulations! You have completed the game!")
